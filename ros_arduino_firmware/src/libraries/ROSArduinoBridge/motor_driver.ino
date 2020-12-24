@@ -86,6 +86,67 @@
     setMotorSpeed(LEFT, leftSpeed);
     setMotorSpeed(RIGHT, rightSpeed);
   }
+#elif defined SMC_G2_MOTOR_DRIVER
+
+  #include <DualG2HighPowerMotorShield.h>
+
+  // Uncomment the version corresponding with the version of your shield.
+  // DualG2HighPowerMotorShield24v14 md;
+  DualG2HighPowerMotorShield18v18 md;
+  // DualG2HighPowerMotorShield24v18 md;
+  // DualG2HighPowerMotorShield18v22 md;
+
+  void initMotorController() {
+    md.init();
+    md.calibrateCurrentOffsets();
+    delay(10);
+    md.enableDrivers();
+    delay(1);
+    // Uncomment to flip a motor's direction:
+    //md.flipM1(true);
+    //md.flipM2(true);
+  }
+
+  // M1 = left motor
+  // M2 = right motor
+  
+  void setMotorSpeed(int i, int spd) {
+    if(spd > 400)
+      spd = 400;
+    if(spd < -400)
+      spd = -400;
+
+    if (i == LEFT) { 
+      md.setM1Speed(spd);
+    }
+    else /*if (i == RIGHT) //no need for condition*/ {
+      md.setM2Speed(spd);
+    }
+    stopIfFault();
+  }
+  
+  void setMotorSpeeds(int leftSpeed, int rightSpeed) {
+    md.setSpeeds(leftSpeed, rightSpeed);
+    stopIfFault();
+  }
+
+  void stopIfFault()
+  {
+    if (md.getM1Fault())
+    {
+      md.disableDrivers();
+  	delay(1);
+      Serial.println("M1 fault");
+      while (1);
+    }
+    if (md.getM2Fault())
+    {
+      md.disableDrivers();
+  	delay(1);
+      Serial.println("M2 fault");
+      while (1);
+    }
+  }
 #else
   #error A motor driver must be selected!
 #endif

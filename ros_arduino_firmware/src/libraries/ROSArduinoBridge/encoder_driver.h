@@ -13,6 +13,18 @@
   #define RIGHT_ENC_PIN_A PC4  //pin A4
   #define RIGHT_ENC_PIN_B PC5   //pin A5
 #endif
+
+#ifdef ARDUINO_ENC_COUNTER2
+  #include "Encoder.h";
+  #define LEFT_ENC_PIN_A 53
+  #define LEFT_ENC_PIN_B 51  
+  
+  #define RIGHT_ENC_PIN_A 47
+  #define RIGHT_ENC_PIN_B 45
+
+  Encoder encoder_l(LEFT_ENC_PIN_A, LEFT_ENC_PIN_B);
+  Encoder encoder_r(RIGHT_ENC_PIN_A, RIGHT_ENC_PIN_B);
+#endif
    
 long readEncoder(int i);
 void resetEncoder(int i);

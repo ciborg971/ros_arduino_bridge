@@ -68,6 +68,23 @@
       return;
     }
   }
+#elif defined(ARDUINO_ENC_COUNTER2)
+  /* Wrap the encoder reading function */
+  long readEncoder(int i) {
+    if (i == LEFT) return encoder_l.read();
+    else return encoder_r.read();
+  }
+
+  /* Wrap the encoder reset function */
+  void resetEncoder(int i) {
+    if (i == LEFT){
+      encoder_l.write(0);
+      return;
+    } else { 
+      encoder_r.write(0);
+      return;
+    }
+  }
 #else
   #error A encoder driver must be selected!
 #endif
